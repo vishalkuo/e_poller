@@ -5,12 +5,20 @@ defmodule EPoller.Poller do
 
   # Should define custom names, maybe multiple processes in the same threadspace will poll
   def start_link(queue_name, config \\ []) do
-    Agent.start_link(fn -> %{:queue_name => queue_name, :config => config} end, name: __MODULE__)
+    Agent.start_link(fn -> %{:queue_name => queue_name, :config => config} end)
   end
 
-  def poll() do 
-    Agent.get(__MODULE__, fn m -> 
-      ExAws.SQS.receive_message(m[:queue_name]) |> ExAws.request
+  @spec poll(PID) :: {:ok, map()}
+  def poll(pid) do 
+     Agent.get(pid, fn m -> 
+      {:ok, result} = ExAws.SQS.receive_message(m[:queue_name]) |> ExAws.request
+
+      mapped_result = result
+        |> Map.get(:body, "test")
+        |> Map.get(:messages)
+        |> Enum.map(fn m -> m[:body] end)
+
+      {:ok, mapped_result}
     end)
   end
 end

@@ -12,8 +12,4 @@ defmodule EPoller do
       :world
 
   """
-
-  def poll do
-    ExAws.SQS.list_queues()
-  end
 end
