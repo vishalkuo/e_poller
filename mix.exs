@@ -7,7 +7,11 @@ defmodule EPoller.Mixfile do
       version: "0.1.0",
       elixir: "~> 1.5",
       start_permanent: Mix.env == :prod,
-      deps: deps()
+      deps: deps(),
+
+      # Docs
+      name: "E_Poller",
+      source_url: "https://github.com/vishalkuo/e_poller"
     ]
   end
 
@@ -25,7 +29,8 @@ defmodule EPoller.Mixfile do
       {:poison, "~> 3.0"},
       {:hackney, "~> 1.9"},
       {:configparser_ex, "~> 2.0"},
-      {:sweet_xml, "~> 0.6"}      
+      {:sweet_xml, "~> 0.6"},
+      {:ex_doc, "~> 0.16", only: :dev, runtime: false}
     ]
   end
 end
