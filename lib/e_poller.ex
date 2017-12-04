@@ -24,7 +24,7 @@ defmodule EPoller do
   @spec poll(PID) :: {:ok, map}
   def poll(pid) do 
      Agent.get(pid, fn m -> 
-      {:ok, result} = ExAws.SQS.receive_message(m[:queue_name]) 
+      {:ok, result} = ExAws.SQS.receive_message(m[:queue_name], m[:config]) 
         |> ExAws.request
 
       mapped_result = result
