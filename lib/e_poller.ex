@@ -36,14 +36,11 @@ defmodule EPoller do
       result
         |> Map.get(:body)
         |> Map.get(:messages)
-        |> Enum.map(fn m -> 
-          state[:handler].(m[:body])
-          m
-        end)
         |> Enum.each(fn m -> 
+          state[:handler].(m[:body])
           delete_message(queue_name, m) 
         end)
-
+        
         :ok
     end)
   end
