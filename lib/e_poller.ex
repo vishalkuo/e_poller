@@ -7,7 +7,7 @@ defmodule EPoller do
   """
 
   @doc """
-  Initializes a queue poller with the given `queue_name``, `message_handler`, and `config`. 
+  Initializes a queue poller with the given `queue_name`, `message_handler`, and `config`. 
 
   Returns `{:ok, PID}`
   """
