@@ -28,12 +28,13 @@ defmodule EPoller.Mixfile do
 
   defp deps do
     [
-      {:ex_aws, "~> 2.0"},
+      {:ex_aws, "~> 2.0.2"},
       {:ex_aws_sqs, "~> 2.0"},      
       {:poison, "~> 3.0"},
       {:hackney, "~> 1.9"},
       {:configparser_ex, "~> 2.0"},
       {:sweet_xml, "~> 0.6"},
+      {:mock, "~> 0.3.0", only: :test},
       {:ex_doc, "~> 0.16", only: :dev, runtime: false}
     ]
   end

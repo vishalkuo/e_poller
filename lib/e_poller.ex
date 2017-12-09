@@ -1,17 +1,28 @@
 defmodule EPoller do
   use Agent
-
   @moduledoc """
   This module serves to enable clients to initialize polling processes
   and have them poll on their own schedule.
   """
+
+  @typedoc """
+  A string represnting the queue's name
+  """
+  @type queue_name :: String.t
+
+  @typedoc """
+  A handler function that acts on each message to process it. If the handler
+  doesn't throw an exception for the message it's processing, the message is deleted
+  off the queue. 
+  """
+  @type handler :: (String.t -> any)
 
   @doc """
   Initializes a queue poller with the given `queue_name`, `message_handler`, and `config`. 
 
   Returns `{:ok, PID}`
   """
-  @spec start_link(binary, function(), list) :: {:ok, PID}
+  @spec start_link(queue_name, handler, EPoller.Config.poller_config_opts) :: {:ok, PID}
   def start_link(
     queue_name, 
     handler, 
@@ -41,22 +52,30 @@ defmodule EPoller do
       region = state[:config][:region]
 
       {:ok, result} = ExAws.SQS.receive_message(queue_name, sqs_conf) 
-        |> ExAws.request(region: region)
+        |> make_request(region)
 
       result
         |> Map.get(:body)
         |> Map.get(:messages)
         |> Enum.each(fn m -> 
-          state[:handler].(m[:body])
-          delete_message(queue_name, m) 
+          try do 
+            state[:handler].(m[:body])
+            delete_message(queue_name, m, region) 
+          rescue 
+            RuntimeError -> "Error"
+          end
         end)
         
         :ok
     end, 30_000)
   end
 
-  defp delete_message(queue_name, body) do 
+  defp delete_message(queue_name, body, region) do 
     ExAws.SQS.delete_message(queue_name, body[:receipt_handle]) 
-      |> ExAws.request
+      |> make_request(region)
+  end
+
+  defp make_request(request, region) do
+    ExAws.request(request, region: region)
   end
 end
