@@ -4,6 +4,17 @@ An SQS long poller meant to simulate the functionality seen in the [Ruby SQS SDK
 
 [Documentation](https://hexdocs.pm/e_poller/api-reference.html)
 
+### Note About Authentication
+
+If you're planning on using config file authentication, the following needs to be added to your
+`config.exs`:
+
+```elixir
+config :ex_aws,
+  access_key_id: [{:system, "AWS_ACCESS_KEY_ID"}, {:awscli, "default", 30}, :instance_role],
+  secret_access_key: [{:system, "AWS_SECRET_ACCESS_KEY"}, {:awscli, "default", 30}, :instance_role]
+```
+
 ## Installation
 
 Add `e_poller` to your `mix.exs` file
