@@ -10,7 +10,7 @@ Add `e_poller` to your `mix.exs` file
 
 ```elixir
 def deps do
-  [{:e_poller, "~> 0.1.0"}]
+  [{:e_poller, "~> 0.1.1"}]
 end
 ```
 
