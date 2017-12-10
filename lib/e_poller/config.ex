@@ -9,7 +9,17 @@ defmodule EPoller.Config do
     region: "us-east-1"]
 
   @typedoc """ 
-  The configurable parameters for the long poller
+  The configurable parameters for the long poller.
+
+  `wait_time_seconds` sets how long the poller will wait for a message to arrive
+
+  `visibility_timeout` sets how long, in seconds, a message will be hidden from
+    subsequent requests after being taken off the queue.
+
+  `max_messages` sets the max number of messages that can be consumed from the poller.
+    This number is limited to 10.
+    
+  `region` sets the region that the queue currently exists in. 
   """
   @type attribute_name :: 
     :wait_time_seconds | 
